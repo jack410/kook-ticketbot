@@ -1,0 +1,6 @@
+.env
+.idea
+session.pid
+message.log*
+kook_reportbot
+npc_quotes.txt
