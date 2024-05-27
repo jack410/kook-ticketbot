@@ -27,8 +27,8 @@ func main() {
 	//session.On(base.EventReceiveFrame, &my_handlers.PersonTextEventHandler{os.Getenv("Token"), os.Getenv("BaseUrl")})
 	//GROUP*代表监听群里的所有信息，GROUP_9代表监听文字信息
 	session.On(base.EventReceiveFrame, &my_handlers.GroupTextEventHandler{os.Getenv("Token"), os.Getenv("BaseUrl")})
-	//session.On("PERSON_9", &my_handlers.PersonTextEventHandler{os.Getenv("Token"), os.Getenv("BaseUrl")})
-
+	session.On(base.EventReceiveFrame, &my_handlers.FaqEventHandler{os.Getenv("Token"), os.Getenv("BaseUrl")})
+	session.On(base.EventReceiveFrame, &my_handlers.MessageDelHandler{os.Getenv("Token"), os.Getenv("BaseUrl")})
 	session.Start()
 }
 
@@ -58,7 +58,7 @@ func init() {
 
 		rotatelogs.WithLinkName(path),
 
-		rotatelogs.WithMaxAge(time.Duration(72)*time.Hour),
+		rotatelogs.WithMaxAge(time.Duration(8760)*time.Hour),
 
 		rotatelogs.WithRotationTime(time.Duration(60)*time.Minute),
 	)

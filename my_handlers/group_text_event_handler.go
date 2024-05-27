@@ -141,16 +141,16 @@ func (gteh *GroupTextEventHandler) Handle(e event.Event) error {
 
 			helpCards.AddHeader("本机器人支持的命令如下：")
 
-			tn := []kook_CardBuild.NotesCreate{}
+			//tn := []kook_CardBuild.NotesCreate{}
 			//文字
-			tn = append(tn, kook_CardBuild.NotesCreate{Types: kook_CardBuild.KmarkdownNoteType, Value: "commit：" + "[" + os.Getenv("Commit") + "]" + "(" + "https://cn.everlook-wow.net/" + ")"})
-			helpCards.AddNotes(tn)
+			//tn = append(tn, kook_CardBuild.NotesCreate{Types: kook_CardBuild.KmarkdownNoteType, Value: "commit：" + "[" + os.Getenv("Commit") + "]" + "(" + "https://cn.everlook-wow.net/" + ")"})
+			//helpCards.AddNotes(tn)
 
 			helpCards.AddDivider()
 			helpCards.AddKmarkdown("(font)!bot help(font)[purple]    " + "查看机器人命令")
 			helpCards.AddKmarkdown("(font)!bot report或者!bot 举报(font)[purple]    " + "触发机器人私信，并通过与机器人私信提交举报信息")
 			helpCards.AddKmarkdown("(font)!bot npc(font)[purple]    " + "随机发送魔兽世界npc经典台词")
-			
+
 			helpCardsContent, err := kook_CardBuild.GenerateCardMessageContent(helpCards)
 			if err != nil {
 				return err

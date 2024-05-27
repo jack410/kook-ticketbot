@@ -10,6 +10,7 @@ require (
 	github.com/kaiheila/golang-bot v0.0.7
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/sirupsen/logrus v1.9.3
+	golang.org/x/text v0.14.0
 )
 
 require (
