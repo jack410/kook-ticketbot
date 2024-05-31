@@ -1,6 +1,7 @@
 package my_handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	kook_CardBuild "github.com/Quinlivanner/kook-CardBuild"
@@ -32,13 +33,37 @@ type Answers struct {
 	ReportSecond    string // content of 2nd question
 }
 
+// 卡片的格式
+type Message struct {
+	Theme   string `json:"theme"`
+	Color   string `json:"color"`
+	Size    string `json:"size"`
+	Expand  bool   `json:"expand"`
+	Modules []struct {
+		Type        string  `json:"type"`
+		Width       int     `json:"width"`
+		Height      int     `json:"height"`
+		Cover       string  `json:"cover"`
+		Duration    float64 `json:"duration"`
+		Title       string  `json:"title"`
+		Src         string  `json:"src"`
+		External    bool    `json:"external"`
+		Size        int     `json:"size"`
+		CanDownload bool    `json:"canDownload"`
+		Elements    []struct {
+			Type string `json:"type"`
+			Src  string `json:"src"`
+		} `json:"elements"`
+	} `json:"modules"`
+	Type string `json:"type"`
+}
+
 var responses map[string]Answers = map[string]Answers{}
 
 func (gteh *GroupTextEventHandler) Handle(e event.Event) error {
 	log.WithField("event", fmt.Sprintf("%+v", e.Data())).Info("收到频道内的文字消息.")
 	var err error
 	err = func() error {
-		log.Infof("匿名函数开始————————————————————————————")
 		if _, ok := e.Data()[base.EventDataFrameKey]; !ok {
 			return errors.New("data has no frame field")
 		}
@@ -71,14 +96,15 @@ func (gteh *GroupTextEventHandler) Handle(e event.Event) error {
 			}
 
 			if answers.ReportContent == "" {
-				answers.ReportContent = msgEvent.Content
+				//answers.ReportContent = msgEvent.Content
+				answers.ReportContent = processMessage(msgEvent.Content)
 				gteh.DirectMessageSend(msgEvent.Code, "#2 请提交下截图或者视频信息，如果没有请回复：没有图像信息。")
 
 				responses[msgEvent.Code] = answers
 				return nil
 			} else {
-				answers.ReportSecond = msgEvent.Content
-
+				//answers.ReportSecond = msgEvent.Content
+				answers.ReportSecond = processMessage(msgEvent.Content)
 				currentTime := time.Now().Format("2006-01-02 15:04:05")
 
 				log.Infof("%v answers: %v, %v", answers.AuthorName, answers.ReportContent, answers.ReportSecond)
@@ -113,7 +139,7 @@ func (gteh *GroupTextEventHandler) Handle(e event.Event) error {
 
 				SendGroupCardessage(userReportCardsContent, answers.TargetChannelId, client)
 				//卡片信息发送至对应频道后，回复玩家提交成功信息。
-				gteh.DirectMessageSend(msgEvent.Code, "举报信息提交成功。我们会进行跟踪处理。感谢您的反馈！")
+				gteh.DirectMessageSend(msgEvent.Code, "举报信息提交成功。我们会进行跟踪处理，感谢您的反馈！")
 
 				delete(responses, msgEvent.Code)
 			}
@@ -254,4 +280,32 @@ func getRandomNpcquote() (string, error) {
 	randomIndex := rand.Intn(len(proverbs))
 
 	return proverbs[randomIndex], nil
+}
+
+// 如果是字符串则直接返回，如果是video或者图片，则返回video或图片的地址
+func processMessage(message string) string {
+
+	var messages []Message
+	err := json.Unmarshal([]byte(message), &messages)
+	if err != nil {
+		return message
+	}
+
+	// 遍历 Modules 提取相应的信息
+	for _, msg := range messages {
+		for _, module := range msg.Modules {
+			switch module.Type {
+			case "video":
+				return module.Src
+			case "container":
+				for _, elem := range module.Elements {
+					if elem.Type == "image" {
+						return elem.Src
+					}
+				}
+			}
+		}
+	}
+
+	return "No media found"
 }
