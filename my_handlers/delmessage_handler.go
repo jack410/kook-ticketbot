@@ -68,8 +68,12 @@ func (gteh *MessageDelHandler) Handle(e event.Event) error {
 			log.Fatal(err)
 		}
 		defer volChatLogFile.Close()
+
 		if hasPrefix(msgEvent.Author.Nickname) {
-			_, err := volChatLogFile.WriteString(msgEvent.Content)
+			currentTime := time.Now()
+			formattedTime := currentTime.Format("2006-01-02 15:04:05")
+			line := strings.Join([]string{formattedTime, msgEvent.AuthorId, msgEvent.Author.Nickname, msgEvent.Content}, " ")
+			_, err := volChatLogFile.WriteString(line)
 			if err != nil {
 				log.Fatal(err)
 			}
