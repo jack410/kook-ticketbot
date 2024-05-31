@@ -61,6 +61,20 @@ func (gteh *MessageDelHandler) Handle(e event.Event) error {
 
 		encoder := simplifiedchinese.GBK.NewEncoder()
 
+		//构建文件名
+		volChatLogPath := fmt.Sprintf("/root/chat/60volchatlog-%s.txt", currentDate)
+		volChatLogFile, err := os.OpenFile(volChatLogPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer volChatLogFile.Close()
+		if hasPrefix(msgEvent.Author.Nickname) {
+			_, err := volChatLogFile.WriteString(msgEvent.Content)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+
 		if msgEvent.Author.Nickname != "" {
 			currentTime := time.Now()
 			formattedTime := currentTime.Format("2006-01-02 15:04:05")
@@ -126,4 +140,8 @@ func checkMessage(message string, keywords []string) bool {
 		}
 	}
 	return false
+}
+
+func hasPrefix(s string) bool {
+	return strings.HasPrefix(s, "CM |") || strings.HasPrefix(s, "VOL |")
 }
