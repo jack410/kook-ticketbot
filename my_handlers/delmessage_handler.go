@@ -72,7 +72,7 @@ func (gteh *MessageDelHandler) Handle(e event.Event) error {
 		if hasPrefix(msgEvent.Author.Nickname) {
 			currentTime := time.Now()
 			formattedTime := currentTime.Format("2006-01-02 15:04:05")
-			line := strings.Join([]string{formattedTime, msgEvent.AuthorId, msgEvent.Author.Nickname, msgEvent.Content}, " ")
+			line := strings.Join([]string{formattedTime, msgEvent.AuthorId, msgEvent.Author.Nickname, msgEvent.Content}, ", ")
 			_, err := volChatLogFile.WriteString(line + "\n")
 			if err != nil {
 				log.Fatal(err)
