@@ -348,6 +348,86 @@ func (gteh *FaqEventHandler) Handle(e event.Event) error {
 			SendGroupCardessage(CardsContent, msgEvent.TargetId, client)
 		}
 
+		if ContainsPhrase(msgEvent.KMarkdown.RawContent, "下载") || ContainsPhrase(msgEvent.KMarkdown.RawContent, "客户端") {
+			Cards, err := kook_CardBuild.NewCardWithOption(kook_CardBuild.CardThemeNone, "lg", "#000000")
+			if err != nil {
+				return err
+			}
+
+			Cards.AddKmarkdown("请前往" + "(chn)" + "4736496800586949" + "(chn)" + "频道下载")
+
+			CardsContent, err := kook_CardBuild.GenerateCardMessageContent(Cards)
+			if err != nil {
+				return err
+			}
+
+			SendGroupCardessage(CardsContent, msgEvent.TargetId, client)
+		}
+
+		if ContainsPhrase(msgEvent.KMarkdown.RawContent, "启动器") {
+			Cards, err := kook_CardBuild.NewCardWithOption(kook_CardBuild.CardThemeNone, "lg", "#000000")
+			if err != nil {
+				return err
+			}
+
+			Cards.AddKmarkdown("(met)" + msgEvent.Author.ID + "(met)" + "  " + "请前往" + linkUrl("https://cn.everlook-wow.net/launcher/") + "下载最新官方启动器")
+
+			CardsContent, err := kook_CardBuild.GenerateCardMessageContent(Cards)
+			if err != nil {
+				return err
+			}
+
+			SendGroupCardessage(CardsContent, msgEvent.TargetId, client)
+		}
+
+		if ContainsPhrase(msgEvent.KMarkdown.RawContent, "充值") || ContainsPhrase(msgEvent.KMarkdown.RawContent, "捐助") {
+			Cards, err := kook_CardBuild.NewCardWithOption(kook_CardBuild.CardThemeNone, "lg", "#000000")
+			if err != nil {
+				return err
+			}
+
+			Cards.AddKmarkdown("请查看" + "(chn)" + "2777878836706338" + "(chn)" + "里面对应教程")
+
+			CardsContent, err := kook_CardBuild.GenerateCardMessageContent(Cards)
+			if err != nil {
+				return err
+			}
+
+			SendGroupCardessage(CardsContent, msgEvent.TargetId, client)
+		}
+
+		if ContainsPhrase(msgEvent.KMarkdown.RawContent, "幻化") || ContainsPhrase(msgEvent.KMarkdown.RawContent, "改名") {
+			Cards, err := kook_CardBuild.NewCardWithOption(kook_CardBuild.CardThemeNone, "lg", "#000000")
+			if err != nil {
+				return err
+			}
+
+			Cards.AddKmarkdown("请查看" + "(chn)" + "2041871976617459" + "(chn)" + "里面对应教程")
+
+			CardsContent, err := kook_CardBuild.GenerateCardMessageContent(Cards)
+			if err != nil {
+				return err
+			}
+
+			SendGroupCardessage(CardsContent, msgEvent.TargetId, client)
+		}
+
+		if ContainsPhrase(msgEvent.KMarkdown.RawContent, "处理") || ContainsPhrase(msgEvent.KMarkdown.RawContent, "解决") {
+			Cards, err := kook_CardBuild.NewCardWithOption(kook_CardBuild.CardThemeNone, "lg", "#000000")
+			if err != nil {
+				return err
+			}
+
+			Cards.AddKmarkdown("请查看" + "(chn)" + "5573736130652654" + "(chn)" + "频道内容")
+
+			CardsContent, err := kook_CardBuild.GenerateCardMessageContent(Cards)
+			if err != nil {
+				return err
+			}
+
+			SendGroupCardessage(CardsContent, msgEvent.TargetId, client)
+		}
+
 		return nil
 	}()
 	if err != nil {
